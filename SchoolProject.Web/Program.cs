@@ -1,4 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SchoolProject.Models;
+using SchoolProject.Repositories;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("SchoolProjectWebContextConnection") ?? throw new InvalidOperationException("Connection string 'SchoolProjectWebContextConnection' not found.");
+
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDBContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
